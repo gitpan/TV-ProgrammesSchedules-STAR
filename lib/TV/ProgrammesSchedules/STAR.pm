@@ -2,6 +2,8 @@ package TV::ProgrammesSchedules::STAR;
 
 use strict; use warnings;
 
+use overload q("") => \&as_string, fallback => 1;
+
 use Carp;
 use Readonly;
 use Data::Dumper;
@@ -15,11 +17,11 @@ TV::ProgrammesSchedules::STAR - Interface to STAR TV Programmes Schedules.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $DEBUG   = 0;
 
 Readonly my $BASE_URL => 'http://www.indya.com/uk/tvguide/tvguide.asp';
@@ -31,27 +33,27 @@ Readonly my $CHANNELS =>
     plus => 'STAR Plus',
 };
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
 STAR is a  leading  media and entertainment  company in Asia. STAR broadcasts over 60 television 
 services in 13 languages to  more than 300 million viewers across 53 Asian countries. STAR TV is 
 the UK's leading provider for South Asian entertainment.  STAR's bouquet of channels  in  the UK 
 includes:
 
-    --------------------------------------------------------------------------------------------
-    | Name      |  Description                                                                 |
-    --------------------------------------------------------------------------------------------
-    | STAR Plus | UK's Most Watched Hindi Pay General Entertainment Channel.                   |
-    |           |                                                                              |
-    | STAR One  | UK's lighter general entertainment channel reflecting contemporary India.    |
-    |           |                                                                              |
-    | STAR Gold | The Widest Reaching Bollywood Movie Channel in the UK.                       |
-    |           |                                                                              |
-    | STAR News | Europe's First 24 Hours Hindi News Channel.                                  |
-    |           |                                                                              |    
-    --------------------------------------------------------------------------------------------
+    +---------------------------------------------------------------------------------------+
+    | Name      |  Description                                                              |
+    +---------------------------------------------------------------------------------------+
+    | STAR Plus | UK's Most Watched Hindi Pay General Entertainment Channel.                |
+    |           |                                                                           |
+    | STAR One  | UK's lighter general entertainment channel reflecting contemporary India. |
+    |           |                                                                           |
+    | STAR Gold | The Widest Reaching Bollywood Movie Channel in the UK.                    |
+    |           |                                                                           |
+    | STAR News | Europe's First 24 Hours Hindi News Channel.                               |
+    |           |                                                                           |    
+    +---------------------------------------------------------------------------------------+
 
-=head2 CONSTRUCTOR
+=head1 CONSTRUCTOR
 
 The constructor optionally expects a reference to an anonymous hash as input parameter. Possible 
 keys to the anonymous hash are (yyyy, mm, dd). The yyyy, mm and dd are optional.If missing picks 
@@ -93,21 +95,21 @@ sub new
 
 =head2 get_listings()
 
-Return the programmes listings for the given channel. Data would be in the form of reference to 
-a list containing anonymous hash with keys time and title for each of the programmes.  Possible
+Return the programmes listings for the given channel.Data would be in the form of reference to a 
+list containing anonymous hash with keys time and title for each of the programmes. The Possible 
 values are listed below:
 
-    --------------------------------
-    | Channel    | Values          | 
-    --------------------------------
-    | STAR Plue  | plus            |  
-    |            |                 |
-    | STAR One   | one             | 
-    |            |                 |  
-    | STAR Gold  | gold            | 
-    |            |                 |
-    | STAR News  | news            |
-    --------------------------------    
+    +-------------------+
+    | Channel   | Value | 
+    +-------------------+
+    | STAR Plue | plus  |  
+    |           |       |
+    | STAR One  | one   | 
+    |           |       |  
+    | STAR Gold | gold  | 
+    |           |       |
+    | STAR News | news  |
+    +-------------------+    
 
     use strict; use warnings;
     use TV::ProgrammesSchedules::STAR;
@@ -179,6 +181,40 @@ sub get_listings
     return $listings;
 }
 
+=head2 as_string()
+
+Returns listings in a human readable format. By default it returns STAR News lisitng.
+
+    use strict; use warnings;
+    use TV::ProgrammesSchedules::STAR;
+
+    my $star     = TV::ProgrammesSchedules::STAR->new();
+    my $listings = $star->get_listings('news');
+
+    print $star->as_string();
+
+    # or even simply
+    print $star;
+
+=cut
+
+sub as_string
+{
+    my $self = shift;
+    my ($listings);
+    
+    $self->{listings} = $self->get_listings('news')
+        unless defined($self->{listings});
+
+    foreach (@{$self->{listings}})
+    {
+        $listings .= sprintf(" Time: %s\n", $_->{time});
+        $listings .= sprintf("Title: %s\n", $_->{title});
+        $listings .= "-------------------\n";
+    }
+    return $listings;
+}
+
 sub _validate_channel
 {
     my $channel = shift;
@@ -210,9 +246,10 @@ Mohammad S Anwar, C<< <mohammad.anwar at yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-tv-programmesschedules-star at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TV-ProgrammesSchedules-STAR>.  
-I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+Please report any bugs/feature requests to  C<bug-tv-programmesschedules-star at rt.cpan.org>, 
+or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TV-ProgrammesSchedules-STAR>.  
+I'll be notified, and then you'll automatically be notified of  progress on your bug as I make 
+changes.
 
 =head1 SUPPORT
 
@@ -246,15 +283,16 @@ L<http://search.cpan.org/dist/TV-ProgrammesSchedules-STAR/>
 
 Copyright 2011 Mohammad S Anwar.
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+This program is free software;  you  can redistribute it and / or modify it under the terms of
+either:  the  GNU  General Public License as published by the Free Software Foundation; or the 
+Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
 =head1 DISCLAIMER
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This  program  is  distributed  in  the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 =cut
 
