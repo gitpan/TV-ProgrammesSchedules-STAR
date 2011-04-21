@@ -17,11 +17,11 @@ TV::ProgrammesSchedules::STAR - Interface to STAR TV Programmes Schedules.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our $DEBUG   = 0;
 
 Readonly my $BASE_URL => 'http://www.indya.com/uk/tvguide/tvguide.asp';
@@ -35,14 +35,14 @@ Readonly my $CHANNELS =>
 
 =head1 DESCRIPTION
 
-STAR is a  leading  media and entertainment  company in Asia. STAR broadcasts over 60 television 
-services in 13 languages to  more than 300 million viewers across 53 Asian countries. STAR TV is 
-the UK's leading provider for South Asian entertainment.  STAR's bouquet of channels  in  the UK 
-includes:
+STAR is a leading media and entertainment company in Asia. STAR broadcasts  over 60 television
+services  in 13 languages to  more than 300 million viewers across 53 Asian countries. STAR TV 
+is the UK's leading provider for South Asian entertainment. STAR's bouquet of channels in  the
+UK includes:
 
-    +---------------------------------------------------------------------------------------+
-    | Name      |  Description                                                              |
-    +---------------------------------------------------------------------------------------+
+    +-----------+---------------------------------------------------------------------------+
+    | Name      | Description                                                              |
+    +-----------+---------------------------------------------------------------------------+
     | STAR Plus | UK's Most Watched Hindi Pay General Entertainment Channel.                |
     |           |                                                                           |
     | STAR One  | UK's lighter general entertainment channel reflecting contemporary India. |
@@ -50,14 +50,13 @@ includes:
     | STAR Gold | The Widest Reaching Bollywood Movie Channel in the UK.                    |
     |           |                                                                           |
     | STAR News | Europe's First 24 Hours Hindi News Channel.                               |
-    |           |                                                                           |    
-    +---------------------------------------------------------------------------------------+
+    +-----------+---------------------------------------------------------------------------+
 
 =head1 CONSTRUCTOR
 
-The constructor optionally expects a reference to an anonymous hash as input parameter. Possible 
-keys to the anonymous hash are (yyyy, mm, dd). The yyyy, mm and dd are optional.If missing picks 
-up the current year, month and day.
+The constructor optionally expects a reference to anonymous hash as input parameter.  Possible
+keys  to the anonymous hash are ( yyyy, mm, dd ). The yyyy, mm and dd are optional. If missing
+picks up the current year, month and day.
 
     use strict; use warnings;
     use TV::ProgrammesSchedules::STAR;
@@ -95,13 +94,13 @@ sub new
 
 =head2 get_listings()
 
-Return the programmes listings for the given channel.Data would be in the form of reference to a 
-list containing anonymous hash with keys time and title for each of the programmes. The Possible 
-values are listed below:
+Return the programmes listings for the given channel.Data would be in the form of reference to
+a  list  containing  anonymous  hash  with keys time and title for each of the programmes. The 
+Possible values are listed below:
 
-    +-------------------+
+    +-----------+-------+
     | Channel   | Value | 
-    +-------------------+
+    +-----------+-------+
     | STAR Plue | plus  |  
     |           |       |
     | STAR One  | one   | 
@@ -109,7 +108,7 @@ values are listed below:
     | STAR Gold | gold  | 
     |           |       |
     | STAR News | news  |
-    +-------------------+    
+    +-----------+-------+    
 
     use strict; use warnings;
     use TV::ProgrammesSchedules::STAR;

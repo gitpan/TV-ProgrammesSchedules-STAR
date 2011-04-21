@@ -1,5 +1,8 @@
 Revision history for TV-ProgrammesSchedules-STAR
 
+0.03    Thu Apr 21 18:50:10 2011
+        - Minor cosmetics changes.
+
 0.02    Mon Apr 18 14:31:10 2011
         - Added method as_string().
         - Renamed title SYNOPSIS to DESCRIPTION.
