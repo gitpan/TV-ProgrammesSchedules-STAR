@@ -17,15 +17,15 @@ TV::ProgrammesSchedules::STAR - Interface to STAR TV Programmes Schedules.
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $DEBUG   = 0;
 
 Readonly my $BASE_URL => 'http://www.indya.com/uk/tvguide/tvguide.asp';
-Readonly my $CHANNELS => 
+Readonly my $CHANNELS =>
 {
     gold => 'STAR Gold',
     news => 'STAR News',
@@ -36,7 +36,7 @@ Readonly my $CHANNELS =>
 =head1 DESCRIPTION
 
 STAR is a leading media and entertainment company in Asia. STAR broadcasts  over 60 television
-services  in 13 languages to  more than 300 million viewers across 53 Asian countries. STAR TV 
+services  in 13 languages to  more than 300 million viewers across 53 Asian countries. STAR TV
 is the UK's leading provider for South Asian entertainment. STAR's bouquet of channels in  the
 UK includes:
 
@@ -60,7 +60,7 @@ picks up the current year, month and day.
 
     use strict; use warnings;
     use TV::ProgrammesSchedules::STAR;
-    
+
     my $star_today = TV::ProgrammesSchedules::STAR->new();
     my $star_on_2011_04_12 = TV::ProgrammesSchedules::STAR->new({ yyyy => 2011, mm => 4 dd => 12 });
 
@@ -70,7 +70,7 @@ sub new
 {
     my $class = shift;
     my $param = shift;
-    
+
     croak("ERROR: Input param has to be a ref to HASH.\n")
         if (defined($param) && (ref($param) ne 'HASH'));
     croak("ERROR: Invalid number of keys found in the input hash.\n")
@@ -79,12 +79,12 @@ sub new
     $param->{_browser} = LWP::UserAgent->new();
     unless (defined($param) && defined($param->{yyyy}) && defined($param->{mm}) && defined($param->{dd}))
     {
-        my $today = localtime; 
+        my $today = localtime;
         $param->{yyyy} = $today->year+1900;
         $param->{mm}   = $today->mon+1;
         $param->{dd}   = $today->mday;
     }
-    
+
     _validate_date($param->{yyyy}, $param->{mm}, $param->{dd});
     bless $param, $class;
     return $param;
@@ -95,24 +95,24 @@ sub new
 =head2 get_listings()
 
 Return the programmes listings for the given channel.Data would be in the form of reference to
-a  list  containing  anonymous  hash  with keys time and title for each of the programmes. The 
+a  list  containing  anonymous  hash  with keys time and title for each of the programmes. The
 Possible values are listed below:
 
     +-----------+-------+
-    | Channel   | Value | 
+    | Channel   | Value |
     +-----------+-------+
-    | STAR Plue | plus  |  
+    | STAR Plue | plus  |
     |           |       |
-    | STAR One  | one   | 
-    |           |       |  
-    | STAR Gold | gold  | 
+    | STAR One  | one   |
+    |           |       |
+    | STAR Gold | gold  |
     |           |       |
     | STAR News | news  |
-    +-----------+-------+    
+    +-----------+-------+
 
     use strict; use warnings;
     use TV::ProgrammesSchedules::STAR;
-    
+
     my $star = TV::ProgrammesSchedules::STAR->new();
     my $listings = $star->get_listings('news');
 
@@ -122,7 +122,7 @@ sub get_listings
 {
     my $self    = shift;
     my $channel = shift;
-    
+
     _validate_channel($channel);
     my ($browser, $ddDate);
     $browser = $self->{_browser};
@@ -131,19 +131,19 @@ sub get_listings
     {
         print {*STDOUT} "Listing already cached previously...\n" if $DEBUG;
         return $self->{$ddDate}->{$channel};
-    }    
-    
+    }
+
     my ($query, $response);
-    $query    = [ ddChannelName => $CHANNELS->{$channel}, 
+    $query    = [ ddChannelName => $CHANNELS->{$channel},
                   ddDate        => $ddDate
                 ];
     print Dumper($query) if $DEBUG;
     $response = $browser->request(POST $BASE_URL, $query);
-    croak("ERROR: Couldn't connect to [$BASE_URL].\n") 
+    croak("ERROR: Couldn't connect to [$BASE_URL].\n")
         unless $response->is_success;
     print {*STDOUT} "Fetch programmes listing for channel [$channel] date [$ddDate] using url [$BASE_URL]..\n"
         if $DEBUG;
-        
+
     my ($contents, $listings, $program, $count);
     $contents = $response->content;
     foreach (split(/\n/,$contents))
@@ -160,24 +160,58 @@ sub get_listings
             while ($row =~ s/\<tr class(.*?)\<\/tr\>//)
             {
                 $line = $1;
-                
+
                 $line =~ /(\d\d\:\d\d)/;
                 $time = $1;
-                
+
                 $line =~ /\&nbsp\;(.*?)\<\/div\>/;
                 $title = $1;
-                
+
                 $title =~ s/[^[:print:]+]//g;
                 $title =~ s/^\s+|\s+$//g;
-                
+
                 push @$listings, { time => $time, title => $title };
             }
             $self->{listings} = $listings;
             return $listings;
         }
     }
-    $self->{$listings} = $listings;
+    $self->{listings} = $listings;
     return $listings;
+}
+
+=head2 as_xml()
+
+Returns listings in XML format. By default it returns todays lisitng for STAR News TV.
+
+    use strict; use warnings;
+    use TV::ProgrammesSchedules::STAR;
+
+    my $star = TV::ProgrammesSchedules::STAR->new();
+    my $listings = $star->get_listings('news');
+    print $star->as_xml();
+
+=cut
+
+sub as_xml
+{
+    my $self = shift;
+    my ($xml, $listings);
+
+    $self->{listings} = $self->get_listings('news')
+        unless defined($self->{listings});
+
+    $xml = qq {<?xml version="1.0" encoding="UTF-8"?>\n};
+    $xml.= qq {<programmes>\n};
+    foreach (@{$self->{listings}})
+    {
+        $xml .= qq {\t<programme>\n};
+        $xml .= qq {\t\t<time> $_->{time} </time>\n};
+        $xml .= qq {\t\t<title> $_->{title} </title>\n};
+        $xml .= qq {\t</programme>\n};
+    }
+    $xml.= qq {</programmes>};
+    return $xml;
 }
 
 =head2 as_string()
@@ -201,7 +235,7 @@ sub as_string
 {
     my $self = shift;
     my ($listings);
-    
+
     $self->{listings} = $self->get_listings('news')
         unless defined($self->{listings});
 
@@ -217,10 +251,10 @@ sub as_string
 sub _validate_channel
 {
     my $channel = shift;
-    
+
     croak("ERROR: Channel undefined.\n")
         unless defined $channel;
-        
+
     croak("ERROR: Invalid channel [$channel].\n")
         unless exists($CHANNELS->{lc($channel)});
 }
@@ -245,9 +279,9 @@ Mohammad S Anwar, C<< <mohammad.anwar at yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs/feature requests to  C<bug-tv-programmesschedules-star at rt.cpan.org>, 
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TV-ProgrammesSchedules-STAR>.  
-I'll be notified, and then you'll automatically be notified of  progress on your bug as I make 
+Please report any bugs/feature requests to  C<bug-tv-programmesschedules-star at rt.cpan.org>,
+or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TV-ProgrammesSchedules-STAR>.
+I'll be notified, and then you'll automatically be notified of  progress on your bug as I make
 changes.
 
 =head1 SUPPORT
@@ -283,14 +317,14 @@ L<http://search.cpan.org/dist/TV-ProgrammesSchedules-STAR/>
 Copyright 2011 Mohammad S Anwar.
 
 This program is free software;  you  can redistribute it and / or modify it under the terms of
-either:  the  GNU  General Public License as published by the Free Software Foundation; or the 
+either:  the  GNU  General Public License as published by the Free Software Foundation; or the
 Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
 =head1 DISCLAIMER
 
-This  program  is  distributed  in  the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+This  program  is  distributed  in  the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 =cut

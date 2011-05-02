@@ -1,5 +1,9 @@
 Revision history for TV-ProgrammesSchedules-STAR
 
+0.04    Mon May 02 15:11:19 2011
+        - Fixed typo in the method get_listings().
+        - Added method as_xml() to return listings in the XML format.
+
 0.03    Thu Apr 21 18:50:10 2011
         - Minor cosmetics changes.
 
