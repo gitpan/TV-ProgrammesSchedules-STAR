@@ -1,5 +1,9 @@
 Revision history for TV-ProgrammesSchedules-STAR
 
+0.05    Mon Aug 08 10:38:11 2011
+        - Made Readonly v1.03 as minimum requirement.
+        - Prepared the distribution using the Module::Signature v0.68.
+
 0.04    Mon May 02 15:11:19 2011
         - Fixed typo in the method get_listings().
         - Added method as_xml() to return listings in the XML format.

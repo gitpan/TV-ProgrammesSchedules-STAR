@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.66.
+signed via the Module::Signature module, version 0.68.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,26 +14,26 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 9ed6ed537986f82c49f26bf7b171d79013a58ca0 Build.PL
-SHA1 dc88de0a43f5ece2d26578177059be9ab14a16c7 Changes
+SHA1 3677bae25d85fff44b7bbc7c14b61810d60e4773 Build.PL
+SHA1 021fae0e2b7113dffc9eaa40a0594a0cb3df4d0a Changes
 SHA1 39d878c006cb4d2050ee3774cfc110eefdaa9c04 MANIFEST
 SHA1 7d20e4e840781030202bb045d5ab81b3fd1b68b0 MANIFEST.SKIP
-SHA1 c309bb8410299ab080498902422203f09f09d6df META.yml
-SHA1 f2a3d54a082c088725ff927f2f48a5046eb365f0 Makefile.PL
+SHA1 64f13f03ca12ad3171587f45aaef053fabc6de28 META.yml
+SHA1 f19bbfcb3c019f162151c9967af4611550987609 Makefile.PL
 SHA1 ba78804c08e58facce6dd4821214d57a412a48bb README
-SHA1 6f86b1170d26257346c3a6b402b16a60cbb69995 lib/TV/ProgrammesSchedules/STAR.pm
+SHA1 cc1af6688f62b82d0225b2353edf34ca7ef5033a lib/TV/ProgrammesSchedules/STAR.pm
 SHA1 24364c604ba856bc791c28c39cf8ec00b2e09a8c t/00-load.t
 SHA1 0ace6487498d233bcf42072a3377d4fc8e8a591a t/01-test-case.t
 SHA1 2b8ffb7e4f399af95d092743846ac8d438f2c53e t/manifest.t
 SHA1 0765c9ff0cc4319f415bb08d0053b7717a8284a2 t/pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (MingW32)
+Version: GnuPG v2.0.14 (MingW32)
 
-iQEcBAEBAgAGBQJNvrxBAAoJENoXJXWo7C/p2EgIAJjaGtmhqnmw3X2spbcOSI7P
-wwOKgaQVG9iUOnPJDYuCknqARDAiKLSQfDlcIqtXRB1uxYNhhn3n6zHxN+VXQ+5F
-WHckZOZ/Gt+V2nk13ks0hs535JlmoryTaJFv3l4qex1mZggt38mN15YpK1ZDvqy7
-qUwcrd5e+SX/shYfDJcnFnqBlk1Ujb/EZ8/Br4G4bvzAgTB9n4F+SAsl/6sKiCPk
-9xTG6Os42SiMYNhVl1KORCelRK8BgCv3TIvBrVp1BkV9HJVo6iOhC17nCA6aH3an
-cpeiBvbKp8fvYVdu5xD1alBo2SlkxlVKM6D/yZH6RZ2vdOxtQCzhHv8vrXTT2iI=
-=w5Dq
+iQEcBAEBAgAGBQJOP679AAoJEPYcXBXhRYOhvJYH/0fJbL5DnEPVzybJ9W4m8105
+WxuTMktOOS+6+vIQPFkxr1qB67NLNnz9p21v+qFl8wMWG5lyIxhqSi1PR3x8U31X
+bhUpFJtQq3pVhNPiBd5hp05LRohy+J1KgdZXvQABTOe3tUe6QDwc6bqJiOK/hddI
+ngRpt5xdVXSy1udNX0AgHwYjqBVNrrb09mvGVdjItzzkHH3AFAXYoGuN+0KNMVcz
+mkDsJ2nMNJB1Tk7zCMYrkFlMLlrAzawASrpIi8yeuDnXjkrLszvGChEUz8uR/+75
+S4iLOxdG8U5p2TvULesjx2wd8NDfCJAMqnzBpzQTiqN5dswdRoqA3zhtEBpaB3Q=
+=33CZ
 -----END PGP SIGNATURE-----
